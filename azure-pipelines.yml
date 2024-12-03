@@ -1,0 +1,20 @@
+trigger:
+- main  # Az a branch, ami elindítja a pipeline-t
+
+pool:
+  vmImage: 'ubuntu-latest'  # Az operációs rendszer, amin a pipeline fut
+
+jobs:
+- job: CreateAndDeployHTML
+  steps:
+  - task: Checkout@1  # Ellenőrzi a kódot a repository-ból
+
+  - script: |
+      echo "<html><body>Hello</body></html>" > index.html
+    displayName: 'Create HTML file'
+
+  - task: AzureWebApp@1  # Az Azure Web App deployment feladat
+    inputs:
+      azureSubscription: '<Azure Subscription>'  # Itt add meg az Azure előfizetésed
+      appName: '<WebAppName>'  # Itt add meg az Azure Web App nevét
+      package: $(System.DefaultWorkingDirectory)/index.html
